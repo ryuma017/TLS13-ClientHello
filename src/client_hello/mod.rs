@@ -23,7 +23,14 @@ struct ClientHello {
 
 impl ClientHello {
     fn new_v1_3() -> Self {
-        todo!()
+        Self {
+            legacy_client_version: ClientVersion::legacy(),
+            client_random: todo!(),
+            legacy_session_id: todo!(),
+            cipher_suites: todo!(),
+            legacy_compression_methods: todo!(),
+            extensions: todo!(),
+        }
     }
 }
 
