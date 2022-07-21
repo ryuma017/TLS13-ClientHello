@@ -7,7 +7,7 @@ pub struct ClientVersion(u16);
 
 impl Encode for ClientVersion {
     fn encode(&self, bytes: &mut Vec<u8>) {
-        self.0.encode(bytes)
+        self.0.encode(bytes);
     }
 }
 
@@ -20,7 +20,7 @@ impl Legacy for ClientVersion {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::{Legacy, Encode};
+    use crate::client_hello::{Encode, Legacy};
 
     use super::ClientVersion;
 
