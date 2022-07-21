@@ -17,3 +17,18 @@ impl Legacy for ClientVersion {
         Self(0x0303)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::client_hello::{Legacy, Encode};
+
+    use super::ClientVersion;
+
+    #[test]
+    fn client_encoding_works() {
+        let client_version = ClientVersion::legacy();
+        let bytes = client_version.get_encoded_bytes();
+
+        assert_eq!(bytes, vec![0x03, 0x03]);
+    }
+}
