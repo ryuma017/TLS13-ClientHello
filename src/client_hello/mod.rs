@@ -26,7 +26,7 @@ impl ClientHello {
         Self {
             legacy_client_version: ClientVersion::legacy(),
             client_random: ClientRandom::new(),
-            legacy_session_id: todo!(),
+            legacy_session_id: SessionID::legacy(),
             cipher_suites: todo!(),
             legacy_compression_methods: todo!(),
             extensions: todo!(),
@@ -38,6 +38,7 @@ impl Encode for ClientHello {
     fn encode(&self, bytes: &mut Vec<u8>) {
         self.legacy_client_version.encode(bytes);
         self.client_random.encode(bytes);
+        self.legacy_session_id.encode(bytes);
         todo!();
     }
 }
