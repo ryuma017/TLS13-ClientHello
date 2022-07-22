@@ -25,7 +25,7 @@ mod tests {
     use super::ClientVersion;
 
     #[test]
-    fn client_encoding_works() {
+    fn client_version_encoding_works() {
         let client_version = ClientVersion::legacy();
         let bytes = client_version.get_encoded_bytes();
 
