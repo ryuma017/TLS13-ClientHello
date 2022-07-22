@@ -16,7 +16,7 @@ impl ClientRandom {
 
 impl Encode for ClientRandom {
     fn encode(&self, bytes: &mut Vec<u8>) {
-        bytes.extend_from_slice(&self.0);
+        self.0.encode(bytes);
     }
 }
 
