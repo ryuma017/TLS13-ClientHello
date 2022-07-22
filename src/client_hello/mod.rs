@@ -65,6 +65,12 @@ impl Encode for u16 {
     }
 }
 
+impl Encode for [u8] {
+    fn encode(&self, bytes: &mut Vec<u8>) {
+        bytes.extend_from_slice(self);
+    }
+}
+
 pub trait Legacy: Sized {
     fn legacy() -> Self;
 }
