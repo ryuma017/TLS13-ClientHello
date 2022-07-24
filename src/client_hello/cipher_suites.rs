@@ -1,5 +1,8 @@
 use super::Encode;
 
+/// In TLS 1.3 the list of possible cipher suites has been greatly reduced.
+/// All the remaining suites are AEAD algorithms which provide stronger encryption
+/// guarantees than many previous suites with an easier all-in-one implementation.
 pub struct CipherSuites {
     length: usize,
     value: Vec<CipherSuite>,
@@ -12,6 +15,7 @@ impl Encode for CipherSuites {
     }
 }
 
+
 fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
     value.iter().for_each(|cs| {
         cs.as_u16().encode(bytes);
@@ -22,13 +26,15 @@ impl Default for CipherSuites {
     fn default() -> Self {
         let value = vec![
             CipherSuite::TLS13_AES_128_GCM_SHA256,
-            CipherSuite::TLS13_AES_256_GCM_SHA384,
         ];
         let length = value.len() * 2;
         Self { length, value }
     }
 }
 
+/// List of possible cipher suites in TLS 1.3
+///
+/// All the suites are AEAD (Authenticated Encryption with Associated Data) algorithms.
 #[allow(non_camel_case_types)]
 #[derive(Clone, Copy)]
 enum CipherSuite {
@@ -40,6 +46,7 @@ enum CipherSuite {
 }
 
 impl CipherSuite {
+    /// Returns u16 assigned to each suite.
     fn as_u16(&self) -> u16 {
         match self {
             Self::TLS13_AES_128_GCM_SHA256 => 0x1301,
