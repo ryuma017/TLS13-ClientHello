@@ -1,6 +1,55 @@
 use super::Encode;
 
-pub struct CipherSuites;
+pub struct CipherSuites {
+    length: usize,
+    value: Vec<CipherSuite>,
+}
+
+impl Encode for CipherSuites {
+    fn encode(&self, bytes: &mut Vec<u8>) {
+        (self.length as u16).encode(bytes);
+        encode_cipher_suites(bytes, &self.value);
+    }
+}
+
+fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
+    value.iter().for_each(|cs| {
+        cs.as_u16().encode(bytes);
+    })
+}
+
+impl Default for CipherSuites {
+    fn default() -> Self {
+        let value = vec![
+            CipherSuite::TLS13_AES_128_GCM_SHA256,
+            CipherSuite::TLS13_AES_256_GCM_SHA384,
+        ];
+        let length = value.len() * 2;
+        Self { length, value }
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Copy)]
+enum CipherSuite {
+    TLS13_AES_128_GCM_SHA256,
+    TLS13_AES_256_GCM_SHA384,
+    TLS13_CHACHA20_POLY1305_SHA256,
+    TLS13_AES_128_CCM_SHA256,
+    TLS13_AES_128_CCM_8_SHA256,
+}
+
+impl CipherSuite {
+    fn as_u16(&self) -> u16 {
+        match self {
+            Self::TLS13_AES_128_GCM_SHA256 => 0x1301,
+            Self::TLS13_AES_256_GCM_SHA384 => 0x1302,
+            Self::TLS13_CHACHA20_POLY1305_SHA256 => 0x1303,
+            Self::TLS13_AES_128_CCM_SHA256 => 0x1304,
+            Self::TLS13_AES_128_CCM_8_SHA256 => 0x1305,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -13,8 +62,6 @@ mod tests {
         let cipher_suites = CipherSuites::default();
         let encoded = cipher_suites.get_encoded_bytes();
 
-        assert_eq!(encoded, [
-            0x00, 0x02, 0x13, 0x01
-        ]);
+        assert_eq!(encoded, [0x00, 0x02, 0x13, 0x01]);
     }
 }

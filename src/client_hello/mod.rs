@@ -27,7 +27,7 @@ impl ClientHello {
             legacy_client_version: ClientVersion::legacy(),
             client_random: ClientRandom::new(),
             legacy_session_id: SessionID::legacy(),
-            cipher_suites: todo!(),
+            cipher_suites: CipherSuites::default(),
             legacy_compression_methods: todo!(),
             extensions: todo!(),
         }
@@ -39,6 +39,7 @@ impl Encode for ClientHello {
         self.legacy_client_version.encode(bytes);
         self.client_random.encode(bytes);
         self.legacy_session_id.encode(bytes);
+        self.cipher_suites.encode(bytes);
         todo!();
     }
 }
