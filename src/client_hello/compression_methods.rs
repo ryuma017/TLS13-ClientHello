@@ -1,8 +1,63 @@
-pub struct CompressionMethods;
+use super::utils::{Encode, Legacy};
+
+/// TLS 1.3 no longer allows compression,
+/// so this field is always a single entry with the "null" compression method
+/// which performs no change to the data.
+pub struct CompressionMethods {
+    length: usize,
+    value: Vec<CompressionMethod>,
+}
+
+impl Encode for CompressionMethods {
+    fn encode(&self, bytes: &mut Vec<u8>) {
+        (self.length as u8).encode(bytes);
+        encode_compression_methods(bytes, &self.value);
+    }
+}
+
+impl Legacy for CompressionMethods {
+    /// - `length` is set to `0x01` .
+    /// - `value` is set to `CompressionMethod::Null` .
+    fn legacy() -> Self {
+        let value = vec![CompressionMethod::Null];
+        Self {
+            length: value.len(),
+            value,
+        }
+    }
+}
+
+fn encode_compression_methods(bytes: &mut Vec<u8>, value: &[CompressionMethod]) {
+    value.iter().for_each(|cm| {
+        cm.as_assigned_u8().encode(bytes);
+    })
+}
+
+/// The compression TLS protocol enum.
+///
+/// In this implementation, only `Null` is used.
+/// Methods other than `Null` are just added for backward compatibility.
+#[allow(clippy::upper_case_acronyms)]
+enum CompressionMethod {
+    Null,
+    Deflate, // Never used.
+    LSZ,     // Never used.
+}
+
+impl CompressionMethod {
+    /// Returns u8 assigned to each method.
+    fn as_assigned_u8(&self) -> u8 {
+        match self {
+            Self::Null => 0x00,
+            Self::Deflate => 0x01,
+            Self::LSZ => 0x40,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::utils::{Legacy, Encode};
+    use crate::client_hello::utils::{Encode, Legacy};
 
     use super::CompressionMethods;
 

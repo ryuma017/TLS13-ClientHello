@@ -9,6 +9,7 @@ mod utils;
 use cipher_suites::CipherSuites;
 use client_random::ClientRandom;
 use client_version::ClientVersion;
+use compression_methods::CompressionMethods;
 use session_id::SessionID;
 use utils::{Encode, Legacy};
 
@@ -17,7 +18,7 @@ struct ClientHello {
     client_random: ClientRandom,
     legacy_session_id: SessionID,
     cipher_suites: CipherSuites,
-    // legacy_compression_methods: CompressionMethods,
+    legacy_compression_methods: CompressionMethods,
     // extensions: Extensions,
 }
 
@@ -28,8 +29,8 @@ impl ClientHello {
             client_random: ClientRandom::new(),
             legacy_session_id: SessionID::legacy(),
             cipher_suites: CipherSuites::default(),
+            legacy_compression_methods: CompressionMethods::legacy(),
             // TODO:
-            // legacy_compression_methods: todo!(),
             // extensions: todo!(),
         }
     }
@@ -41,7 +42,8 @@ impl Encode for ClientHello {
         self.client_random.encode(bytes);
         self.legacy_session_id.encode(bytes);
         self.cipher_suites.encode(bytes);
-        // todo!();
+        self.legacy_compression_methods.encode(bytes);
+        // self.extensions.encode(bytes);
     }
 }
 
@@ -62,7 +64,7 @@ mod tests {
                 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6,
                 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4,
                 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff, 0x00, 0x02, 0x13,
-                0x01
+                0x01, 0x01, 0x00
             ]
         )
     }
