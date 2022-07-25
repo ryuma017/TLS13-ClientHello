@@ -17,7 +17,7 @@ impl Encode for CipherSuites {
 
 fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
     value.iter().for_each(|cs| {
-        cs.as_u16().encode(bytes);
+        cs.as_assigned_u16().encode(bytes);
     })
 }
 
@@ -29,7 +29,7 @@ impl Default for CipherSuites {
     }
 }
 
-/// List of possible cipher suites in TLS 1.3
+/// The possible cipher suites enum in TLS 1.3.
 ///
 /// All the suites are AEAD (Authenticated Encryption with Associated Data) algorithms.
 #[allow(non_camel_case_types)]
@@ -43,8 +43,8 @@ enum CipherSuite {
 }
 
 impl CipherSuite {
-    /// Returns u16 assigned to each suite.
-    fn as_u16(&self) -> u16 {
+    /// Returns `u16` assigned to each suite.
+    fn as_assigned_u16(&self) -> u16 {
         match self {
             Self::TLS13_AES_128_GCM_SHA256 => 0x1301,
             Self::TLS13_AES_256_GCM_SHA384 => 0x1302,
