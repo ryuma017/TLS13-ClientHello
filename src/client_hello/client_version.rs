@@ -1,4 +1,4 @@
-use super::{Encode, Legacy};
+use super::utils::{Encode, Legacy};
 
 /// TLS 1.3 session must be disguised as a TLS 1.2 session.
 /// This field is no longer used for version negotiation
@@ -20,7 +20,7 @@ impl Legacy for ClientVersion {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::{Encode, Legacy};
+    use crate::client_hello::utils::{Encode, Legacy};
 
     use super::ClientVersion;
 

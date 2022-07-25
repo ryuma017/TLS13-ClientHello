@@ -1,4 +1,4 @@
-use super::Encode;
+use super::utils::Encode;
 
 /// The client provides 32 bytes of random data.
 /// This data will be used later in the session.

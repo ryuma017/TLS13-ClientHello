@@ -1,4 +1,4 @@
-use super::{Encode, Legacy};
+use super::utils::{Encode, Legacy};
 
 /// In TLS 1.3, a value in this field is used to trigger "middlebox compatibility mode"
 /// which helps TLS 1.3 sessions to be disguised as resumed TLS 1.2 sessions.
@@ -42,7 +42,7 @@ fn fill_with_fake_session_id(bytes: &mut [u8; 32]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::{Encode, Legacy};
+    use crate::client_hello::utils::{Encode, Legacy};
 
     use super::SessionID;
 

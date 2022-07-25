@@ -1,4 +1,4 @@
-use super::Encode;
+use super::utils::Encode;
 
 /// In TLS 1.3 the list of possible cipher suites has been greatly reduced.
 /// All the remaining suites are AEAD algorithms which provide stronger encryption
@@ -15,7 +15,6 @@ impl Encode for CipherSuites {
     }
 }
 
-
 fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
     value.iter().for_each(|cs| {
         cs.as_u16().encode(bytes);
@@ -24,9 +23,7 @@ fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
 
 impl Default for CipherSuites {
     fn default() -> Self {
-        let value = vec![
-            CipherSuite::TLS13_AES_128_GCM_SHA256,
-        ];
+        let value = vec![CipherSuite::TLS13_AES_128_GCM_SHA256];
         let length = value.len() * 2;
         Self { length, value }
     }
@@ -60,7 +57,7 @@ impl CipherSuite {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::Encode;
+    use crate::client_hello::utils::Encode;
 
     use super::CipherSuites;
 
