@@ -5,30 +5,30 @@ use super::utils::{Encode, Legacy};
 /// which performs no change to the data.
 pub struct CompressionMethods {
     length: usize,
-    value: Vec<CompressionMethod>,
+    values: Vec<CompressionMethod>,
 }
 
 impl Encode for CompressionMethods {
     fn encode(&self, bytes: &mut Vec<u8>) {
         (self.length as u8).encode(bytes);
-        encode_compression_methods(bytes, &self.value);
+        encode_compression_methods(bytes, &self.values);
     }
 }
 
 impl Legacy for CompressionMethods {
     /// - `length` is set to `0x01` .
-    /// - `value` is set to `CompressionMethod::Null` .
+    /// - `values` is set to `CompressionMethod::Null` .
     fn legacy() -> Self {
-        let value = vec![CompressionMethod::Null];
+        let values = vec![CompressionMethod::Null];
         Self {
-            length: value.len(),
-            value,
+            length: values.len(),
+            values,
         }
     }
 }
 
-fn encode_compression_methods(bytes: &mut Vec<u8>, value: &[CompressionMethod]) {
-    value.iter().for_each(|cm| {
+fn encode_compression_methods(bytes: &mut Vec<u8>, values: &[CompressionMethod]) {
+    values.iter().for_each(|cm| {
         cm.as_assigned_u8().encode(bytes);
     })
 }

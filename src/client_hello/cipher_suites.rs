@@ -5,27 +5,27 @@ use super::utils::Encode;
 /// guarantees than many previous suites with an easier all-in-one implementation.
 pub struct CipherSuites {
     length: usize,
-    value: Vec<CipherSuite>,
+    values: Vec<CipherSuite>,
 }
 
 impl Encode for CipherSuites {
     fn encode(&self, bytes: &mut Vec<u8>) {
         (self.length as u16).encode(bytes);
-        encode_cipher_suites(bytes, &self.value);
+        encode_cipher_suites(bytes, &self.values);
     }
 }
 
-fn encode_cipher_suites(bytes: &mut Vec<u8>, value: &[CipherSuite]) {
-    value.iter().for_each(|cs| {
+fn encode_cipher_suites(bytes: &mut Vec<u8>, values: &[CipherSuite]) {
+    values.iter().for_each(|cs| {
         cs.as_assigned_u16().encode(bytes);
     })
 }
 
 impl Default for CipherSuites {
     fn default() -> Self {
-        let value = vec![CipherSuite::TLS13_AES_128_GCM_SHA256];
-        let length = value.len() * 2;
-        Self { length, value }
+        let values = vec![CipherSuite::TLS13_AES_128_GCM_SHA256];
+        let length = values.len() * 2;
+        Self { length, values }
     }
 }
 
