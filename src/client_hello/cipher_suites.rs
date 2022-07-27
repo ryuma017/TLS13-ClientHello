@@ -1,17 +1,16 @@
+use std::ops::Deref;
+
 use super::utils::Encode;
 
 /// In TLS 1.3 the list of possible cipher suites has been greatly reduced.
 /// All the remaining suites are AEAD algorithms which provide stronger encryption
 /// guarantees than many previous suites with an easier all-in-one implementation.
-pub struct CipherSuites {
-    length: usize,
-    values: Vec<CipherSuite>,
-}
+pub struct CipherSuites(Vec<CipherSuite>);
 
 impl Encode for CipherSuites {
     fn encode(&self, bytes: &mut Vec<u8>) {
-        (self.length as u16).encode(bytes);
-        encode_cipher_suites(bytes, &self.values);
+        (self.len() as u16).encode(bytes);
+        encode_cipher_suites(bytes, self);
     }
 }
 
@@ -23,9 +22,15 @@ fn encode_cipher_suites(bytes: &mut Vec<u8>, values: &[CipherSuite]) {
 
 impl Default for CipherSuites {
     fn default() -> Self {
-        let values = vec![CipherSuite::TLS13_AES_128_GCM_SHA256];
-        let length = values.len() * 2;
-        Self { length, values }
+        Self(vec![CipherSuite::TLS13_AES_128_GCM_SHA256])
+    }
+}
+
+impl Deref for CipherSuites {
+    type Target = Vec<CipherSuite>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 
@@ -34,7 +39,7 @@ impl Default for CipherSuites {
 /// All the suites are AEAD (Authenticated Encryption with Associated Data) algorithms.
 #[allow(non_camel_case_types)]
 #[derive(Clone, Copy)]
-enum CipherSuite {
+pub enum CipherSuite {
     TLS13_AES_128_GCM_SHA256,
     TLS13_AES_256_GCM_SHA384,
     TLS13_CHACHA20_POLY1305_SHA256,
