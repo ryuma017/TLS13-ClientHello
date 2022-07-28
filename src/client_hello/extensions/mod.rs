@@ -18,14 +18,14 @@ impl Encode for Extensions {
     fn encode(&self, bytes: &mut Vec<u8>) {
         let mut sub: Vec<u8> = Vec::new();
         self.iter().for_each(|ext| {
-            ext.as_assigned_u16().encode(bytes);
+            ext.as_assigned_u16().encode(&mut sub);
 
             match ext {
                 ExtensionType::SupportedGroups(ref e) => e.encode(&mut sub),
                 ExtensionType::SignatureAlgorithms(ref e) => e.encode(&mut sub),
                 ExtensionType::SupportedVersions(ref e) => e.encode(&mut sub),
                 ExtensionType::KeyShare(ref e) => e.encode(&mut sub),
-            }
+            };
         });
 
         (sub.len() as u16).encode(bytes);
