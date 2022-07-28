@@ -7,7 +7,7 @@ pub struct SupportedGroupList(Vec<SupportedGroup>);
 impl Encode for SupportedGroupList {
     fn encode(&self, bytes: &mut Vec<u8>) {
         let mut sub: Vec<u8> = Vec::new();
-        encode_supported_group(&mut sub, self);
+        encode_supported_groups(&mut sub, self);
         (sub.len() as u16).encode(bytes);
         bytes.append(&mut sub);
     }
@@ -32,7 +32,7 @@ impl Deref for SupportedGroupList {
     }
 }
 
-fn encode_supported_group(bytes: &mut Vec<u8>, values: &[SupportedGroup]) {
+fn encode_supported_groups(bytes: &mut Vec<u8>, values: &[SupportedGroup]) {
     let mut sub: Vec<u8> = Vec::new();
     values.iter().for_each(|sg| {
         sg.as_assigned_u16().encode(&mut sub);
