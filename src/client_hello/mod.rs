@@ -10,6 +10,7 @@ use cipher_suites::CipherSuites;
 use client_random::ClientRandom;
 use client_version::ClientVersion;
 use compression_methods::CompressionMethods;
+use extensions::Extensions;
 use session_id::SessionID;
 use utils::{Encode, Legacy};
 
@@ -19,7 +20,7 @@ struct ClientHello {
     legacy_session_id: SessionID,
     cipher_suites: CipherSuites,
     legacy_compression_methods: CompressionMethods,
-    // extensions: Extensions,
+    extensions: Extensions,
 }
 
 impl ClientHello {
@@ -30,8 +31,7 @@ impl ClientHello {
             legacy_session_id: SessionID::legacy(),
             cipher_suites: CipherSuites::default(),
             legacy_compression_methods: CompressionMethods::legacy(),
-            // TODO:
-            // extensions: todo!(),
+            extensions: Extensions::default(),
         }
     }
 }
