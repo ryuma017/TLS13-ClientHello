@@ -1,6 +1,8 @@
 use crate::client_hello::{
+    extensions::{
+        KeyShareEntries, SignatureAlgorithmList, SupportedGroupList, SupportedVersionList,
+    },
     utils::AssignedValue,
-    extensions::{SignatureAlgorithmList, SupportedGroupList, SupportedVersionList, KeyShareEntries}
 };
 
 pub enum ProtocolVersion {

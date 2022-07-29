@@ -10,7 +10,10 @@ pub use signature_algorithms::SignatureAlgorithmList;
 pub use supported_groups::SupportedGroupList;
 pub use supported_versions::SupportedVersionList;
 
-use super::{utils::{Encode, AssignedValue}, enums::ExtensionType};
+use super::{
+    enums::ExtensionType,
+    utils::{AssignedValue, Encode},
+};
 
 pub struct Extensions(Vec<ExtensionType>);
 

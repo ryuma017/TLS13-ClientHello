@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use super::{utils::{Encode, Legacy, AssignedValue}, enums::CompressionMethod};
+use super::{
+    enums::CompressionMethod,
+    utils::{AssignedValue, Encode, Legacy},
+};
 
 /// TLS 1.3 no longer allows compression,
 /// so this field is always a single entry with the "null" compression method

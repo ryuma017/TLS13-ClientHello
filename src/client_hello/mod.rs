@@ -2,10 +2,10 @@ mod cipher_suites;
 mod client_random;
 mod client_version;
 mod compression_methods;
+mod enums;
 mod extensions;
 mod session_id;
 mod utils;
-mod enums;
 
 use cipher_suites::CipherSuites;
 use client_random::ClientRandom;

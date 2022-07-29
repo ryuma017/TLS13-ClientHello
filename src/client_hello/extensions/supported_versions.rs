@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use crate::client_hello::{utils::{Encode, AssignedValue}, enums::ProtocolVersion};
+use crate::client_hello::{
+    enums::ProtocolVersion,
+    utils::{AssignedValue, Encode},
+};
 
 pub struct SupportedVersionList(Vec<ProtocolVersion>);
 
@@ -50,9 +53,6 @@ mod tests {
         let supported_versions = SupportedVersionList::default();
         let encoded = supported_versions.get_encoded_bytes();
 
-        assert_eq!(
-            encoded,
-            vec![0x00, 0x03, 0x02, 0x03, 0x04]
-        )
+        assert_eq!(encoded, vec![0x00, 0x03, 0x02, 0x03, 0x04])
     }
 }

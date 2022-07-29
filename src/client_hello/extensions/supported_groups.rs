@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use crate::client_hello::{utils::{Encode, AssignedValue}, enums::NamedGroup};
+use crate::client_hello::{
+    enums::NamedGroup,
+    utils::{AssignedValue, Encode},
+};
 
 pub struct SupportedGroupList(Vec<NamedGroup>);
 

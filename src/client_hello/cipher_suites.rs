@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use super::{utils::{Encode, AssignedValue}, enums::CipherSuite};
+use super::{
+    enums::CipherSuite,
+    utils::{AssignedValue, Encode},
+};
 
 /// In TLS 1.3 the list of possible cipher suites has been greatly reduced.
 /// All the remaining suites are AEAD algorithms which provide stronger encryption

@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use crate::client_hello::{utils::{Encode, AssignedValue}, enums::SignatureScheme};
+use crate::client_hello::{
+    enums::SignatureScheme,
+    utils::{AssignedValue, Encode},
+};
 
 pub struct SignatureAlgorithmList(Vec<SignatureScheme>);
 
