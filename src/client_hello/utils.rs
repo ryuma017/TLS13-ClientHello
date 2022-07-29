@@ -30,3 +30,9 @@ impl Encode for [u8] {
 pub(super) trait Legacy: Sized {
     fn legacy() -> Self;
 }
+
+pub(super) trait AssignedValue {
+    type Integer: Encode;
+
+    fn assigned_value(&self) -> Self::Integer;
+}

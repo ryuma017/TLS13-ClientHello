@@ -1,16 +1,16 @@
 mod key_share;
 mod signature_algorithms;
 mod supported_groups;
-mod supported_version;
+mod supported_versions;
 
 use std::ops::Deref;
 
-use key_share::KeyShareEntries;
-use signature_algorithms::SignatureAlgorithmList;
-use supported_groups::SupportedGroupList;
-use supported_version::SupportedVersionList;
+pub use key_share::KeyShareEntries;
+pub use signature_algorithms::SignatureAlgorithmList;
+pub use supported_groups::SupportedGroupList;
+pub use supported_versions::SupportedVersionList;
 
-use super::utils::Encode;
+use super::{utils::{Encode, AssignedValue}, enums::ExtensionType};
 
 pub struct Extensions(Vec<ExtensionType>);
 
@@ -18,7 +18,7 @@ impl Encode for Extensions {
     fn encode(&self, bytes: &mut Vec<u8>) {
         let mut sub: Vec<u8> = Vec::new();
         self.iter().for_each(|ext| {
-            ext.as_assigned_u16().encode(&mut sub);
+            ext.assigned_value().encode(&mut sub);
 
             match ext {
                 ExtensionType::SupportedGroups(ref e) => e.encode(&mut sub),
@@ -54,35 +54,17 @@ impl Deref for Extensions {
     }
 }
 
-pub enum ExtensionType {
-    SupportedGroups(SupportedGroupList),
-    SignatureAlgorithms(SignatureAlgorithmList),
-    SupportedVersions(SupportedVersionList),
-    KeyShare(KeyShareEntries),
-}
+// #[cfg(test)]
+// mod tests {
+//     use crate::client_hello::utils::Encode;
 
-impl ExtensionType {
-    fn as_assigned_u16(&self) -> u16 {
-        match self {
-            Self::SupportedGroups(_) => 0x000a,
-            Self::SignatureAlgorithms(_) => 0x000d,
-            Self::SupportedVersions(_) => 0x002d,
-            Self::KeyShare(_) => 0x0033,
-        }
-    }
-}
+//     use super::Extensions;
 
-#[cfg(test)]
-mod tests {
-    use crate::client_hello::utils::Encode;
+//     #[test]
+//     fn extensions_encoding_works() {
+//         let extensions = Extensions::default();
+//         let encoded = extensions.get_encoded_bytes();
 
-    use super::Extensions;
-
-    #[test]
-    fn extensions_encoding_works() {
-        let extensions = Extensions::default();
-        let encoded = extensions.get_encoded_bytes();
-
-        assert_eq!(encoded, vec![]);
-    }
-}
+//         assert_eq!(encoded, vec![]);
+//     }
+// }

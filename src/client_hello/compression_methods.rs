@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use super::utils::{Encode, Legacy};
+use super::{utils::{Encode, Legacy, AssignedValue}, enums::CompressionMethod};
 
 /// TLS 1.3 no longer allows compression,
 /// so this field is always a single entry with the "null" compression method
@@ -24,7 +24,7 @@ impl Legacy for CompressionMethods {
 
 fn encode_compression_methods(bytes: &mut Vec<u8>, values: &[CompressionMethod]) {
     values.iter().for_each(|cm| {
-        cm.as_assigned_u8().encode(bytes);
+        cm.assigned_value().encode(bytes);
     })
 }
 
@@ -39,28 +39,6 @@ impl Deref for CompressionMethods {
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-/// The compression TLS protocol enum.
-///
-/// In this implementation, only `Null` is used.
-/// Methods other than `Null` are just added for backward compatibility.
-#[allow(clippy::upper_case_acronyms)]
-pub enum CompressionMethod {
-    Null,
-    Deflate, // Never used.
-    LSZ,     // Never used.
-}
-
-impl CompressionMethod {
-    /// Returns u8 assigned to each method.
-    fn as_assigned_u8(&self) -> u8 {
-        match self {
-            Self::Null => 0x00,
-            Self::Deflate => 0x01,
-            Self::LSZ => 0x40,
-        }
     }
 }
 

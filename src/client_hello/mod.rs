@@ -5,6 +5,7 @@ mod compression_methods;
 mod extensions;
 mod session_id;
 mod utils;
+mod enums;
 
 use cipher_suites::CipherSuites;
 use client_random::ClientRandom;

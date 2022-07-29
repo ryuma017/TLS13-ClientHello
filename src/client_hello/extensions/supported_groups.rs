@@ -1,8 +1,8 @@
 use std::ops::Deref;
 
-use crate::client_hello::utils::Encode;
+use crate::client_hello::{utils::{Encode, AssignedValue}, enums::NamedGroup};
 
-pub struct SupportedGroupList(Vec<SupportedGroup>);
+pub struct SupportedGroupList(Vec<NamedGroup>);
 
 impl Encode for SupportedGroupList {
     fn encode(&self, bytes: &mut Vec<u8>) {
@@ -15,7 +15,7 @@ impl Encode for SupportedGroupList {
 
 impl Default for SupportedGroupList {
     fn default() -> Self {
-        use SupportedGroup::*;
+        use NamedGroup::*;
 
         Self(vec![
             secp256r1, secp384r1, secp521r1, X25519, X448, FFDHE2048, FFDHE3072, FFDHE4096,
@@ -25,52 +25,21 @@ impl Default for SupportedGroupList {
 }
 
 impl Deref for SupportedGroupList {
-    type Target = Vec<SupportedGroup>;
+    type Target = Vec<NamedGroup>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-fn encode_supported_groups(bytes: &mut Vec<u8>, values: &[SupportedGroup]) {
+fn encode_supported_groups(bytes: &mut Vec<u8>, values: &[NamedGroup]) {
     let mut sub: Vec<u8> = Vec::new();
     values.iter().for_each(|sg| {
-        sg.as_assigned_u16().encode(&mut sub);
+        sg.assigned_value().encode(&mut sub);
     });
 
     (sub.len() as u16).encode(bytes);
     bytes.append(&mut sub);
-}
-
-#[allow(non_camel_case_types)]
-pub enum SupportedGroup {
-    secp256r1,
-    secp384r1,
-    secp521r1,
-    X25519,
-    X448,
-    FFDHE2048,
-    FFDHE3072,
-    FFDHE4096,
-    FFDHE6144,
-    FFDHE8192,
-}
-
-impl SupportedGroup {
-    fn as_assigned_u16(&self) -> u16 {
-        match self {
-            Self::secp256r1 => 0x0017,
-            Self::secp384r1 => 0x0018,
-            Self::secp521r1 => 0x0019,
-            Self::X25519 => 0x001d,
-            Self::X448 => 0x001e,
-            Self::FFDHE2048 => 0x0100,
-            Self::FFDHE3072 => 0x0101,
-            Self::FFDHE4096 => 0x0102,
-            Self::FFDHE6144 => 0x0103,
-            Self::FFDHE8192 => 0x0104,
-        }
-    }
 }
 
 #[cfg(test)]
