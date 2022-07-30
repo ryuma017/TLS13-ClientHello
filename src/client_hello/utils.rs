@@ -1,4 +1,4 @@
-pub(super) trait Encode {
+pub trait Encode {
     fn encode(&self, bytes: &mut Vec<u8>);
 
     fn get_encoded_bytes(&self) -> Vec<u8> {
@@ -27,11 +27,11 @@ impl Encode for [u8] {
     }
 }
 
-pub(super) trait Legacy: Sized {
+pub trait Legacy: Sized {
     fn legacy() -> Self;
 }
 
-pub(super) trait AssignedValue {
+pub trait AssignedValue {
     type Integer: Encode;
 
     fn assigned_value(&self) -> Self::Integer;
