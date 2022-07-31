@@ -6,6 +6,7 @@ mod enums;
 mod extensions;
 mod session_id;
 mod utils;
+mod handshake;
 
 use cipher_suites::CipherSuites;
 use client_random::ClientRandom;
@@ -15,7 +16,7 @@ use extensions::Extensions;
 use session_id::SessionID;
 use utils::{Encode, Legacy};
 
-struct ClientHello {
+pub struct ClientHello {
     legacy_client_version: ClientVersion,
     client_random: ClientRandom,
     legacy_session_id: SessionID,

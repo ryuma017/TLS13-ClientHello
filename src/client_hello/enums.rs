@@ -5,6 +5,8 @@ use crate::client_hello::{
     utils::AssignedValue,
 };
 
+use super::{ClientHello, utils::Encode};
+
 pub enum ProtocolVersion {
     TLSv1_0,
     TLSv1_1,
@@ -42,7 +44,7 @@ impl AssignedValue for CipherSuite {
     type Integer = u16;
 
     fn assigned_value(&self) -> Self::Integer {
-        match self {
+        match *self {
             Self::TLS13_AES_128_GCM_SHA256 => 0x1301,
             Self::TLS13_AES_256_GCM_SHA384 => 0x1302,
             Self::TLS13_CHACHA20_POLY1305_SHA256 => 0x1303,
@@ -67,7 +69,7 @@ impl AssignedValue for CompressionMethod {
     type Integer = u8;
 
     fn assigned_value(&self) -> Self::Integer {
-        match self {
+        match *self {
             Self::Null => 0x00,
             Self::Deflate => 0x01,
             Self::LSZ => 0x40,
@@ -86,7 +88,7 @@ impl AssignedValue for ExtensionType {
     type Integer = u16;
 
     fn assigned_value(&self) -> Self::Integer {
-        match self {
+        match *self {
             Self::SupportedGroups(_) => 0x000a,
             Self::SignatureAlgorithms(_) => 0x000d,
             Self::SupportedVersions(_) => 0x002d,
@@ -150,7 +152,7 @@ impl AssignedValue for SignatureScheme {
     type Integer = u16;
 
     fn assigned_value(&self) -> Self::Integer {
-        match self {
+        match *self {
             Self::ECDSA_SECP256r1_SHA256 => 0x0403,
             Self::ECDSA_SECP384r1_SHA384 => 0x0503,
             Self::ECDSA_SECP521r1_SHA512 => 0x0603,
@@ -165,6 +167,34 @@ impl AssignedValue for SignatureScheme {
             Self::RSA_PKCS1_SHA256 => 0x0401,
             Self::RSA_PKCS1_SHA384 => 0x0501,
             Self::RSA_PKCS1_SHA512 => 0x0601,
+        }
+    }
+}
+
+// とりあえず ClientHello だけ
+// TODO: 気が向いたら拡張していきたいなぁ
+pub enum HandshakeType {
+    ClientHello
+}
+
+impl AssignedValue for HandshakeType {
+    type Integer = u8;
+
+    fn assigned_value(&self) -> Self::Integer {
+        match *self {
+            Self::ClientHello => 0x01,
+        }
+    }
+}
+
+pub enum HandshakeData {
+    ClientHello(ClientHello)
+}
+
+impl HandshakeData {
+    pub fn encode(&self, bytes: &mut Vec<u8>) {
+        match *self {
+            Self::ClientHello(ref data) => data.encode(bytes),
         }
     }
 }
