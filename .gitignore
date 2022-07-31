@@ -1,2 +1,5 @@
 /target
+
+server.crt
+server.csr
 private.key

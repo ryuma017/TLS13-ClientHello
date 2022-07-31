@@ -34,7 +34,7 @@ impl TLSPlaintext {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::{HandshakeMessage, ClientHello};
+    use crate::client_hello::{ClientHello, HandshakeMessage};
 
     use super::TLSPlaintext;
 
