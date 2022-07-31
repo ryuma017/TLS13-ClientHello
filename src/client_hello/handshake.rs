@@ -36,7 +36,7 @@ mod tests {
 
     #[test]
     fn client_hello_handshake_message_encoding_works() {
-        let ch_data = ClientHello::new_v1_3();
+        let ch_data = ClientHello::default_v1_3();
         let handshake_message = HandshakeMessage::new_client_hello(ch_data);
         let encoded = handshake_message.get_encoded_bytes();
 

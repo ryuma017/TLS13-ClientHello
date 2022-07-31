@@ -1,12 +1,16 @@
+pub mod handshake;
+pub mod tls_plaintext;
+
+pub use handshake::HandshakeMessage;
+pub use tls_plaintext::TLSPlaintext;
+
 mod cipher_suites;
 mod client_random;
 mod client_version;
 mod compression_methods;
 mod enums;
 mod extensions;
-mod handshake;
 mod session_id;
-mod tls_plaintext;
 mod utils;
 
 use cipher_suites::CipherSuites;
@@ -27,7 +31,7 @@ pub struct ClientHello {
 }
 
 impl ClientHello {
-    fn new_v1_3() -> Self {
+    pub fn default_v1_3() -> Self {
         Self {
             legacy_client_version: ClientVersion::legacy(),
             client_random: ClientRandom::new(),
@@ -56,7 +60,7 @@ mod tests {
 
     #[test]
     fn client_hello_encoding_works() {
-        let client_hello = ClientHello::new_v1_3();
+        let client_hello = ClientHello::default_v1_3();
         let encoded = client_hello.get_encoded_bytes();
 
         assert_eq!(

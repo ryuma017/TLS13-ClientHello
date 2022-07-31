@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::client_hello::{
     extensions::{
         KeyShareEntries, SignatureAlgorithmList, SupportedGroupList, SupportedVersionList,
