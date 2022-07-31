@@ -42,7 +42,7 @@ pub trait Legacy: Sized {
 }
 
 pub trait AssignedValue {
-    type Integer: Encode;
+    type UInt: Encode;
 
-    fn assigned_value(&self) -> Self::Integer;
+    fn assigned_value(&self) -> Self::UInt;
 }

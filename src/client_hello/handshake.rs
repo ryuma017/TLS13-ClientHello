@@ -1,4 +1,8 @@
-use super::{ClientHello, enums::{HandshakeType, HandshakeData}, utils::{Encode, AssignedValue, u24}};
+use super::{
+    enums::{HandshakeData, HandshakeType},
+    utils::{u24, AssignedValue, Encode},
+    ClientHello,
+};
 
 pub struct HandshakeMessage {
     hs_type: HandshakeType,
@@ -7,7 +11,10 @@ pub struct HandshakeMessage {
 
 impl HandshakeMessage {
     pub fn new_client_hello(data: ClientHello) -> Self {
-        Self { hs_type: HandshakeType::ClientHello, data: HandshakeData::ClientHello(data) }
+        Self {
+            hs_type: HandshakeType::ClientHello,
+            data: HandshakeData::ClientHello(data),
+        }
     }
 }
 
@@ -23,7 +30,7 @@ impl Encode for HandshakeMessage {
 
 #[cfg(test)]
 mod tests {
-    use crate::client_hello::{ClientHello, utils::Encode};
+    use crate::client_hello::{utils::Encode, ClientHello};
 
     use super::HandshakeMessage;
 

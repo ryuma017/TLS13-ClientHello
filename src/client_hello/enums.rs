@@ -5,7 +5,7 @@ use crate::client_hello::{
     utils::AssignedValue,
 };
 
-use super::{ClientHello, utils::Encode};
+use super::{utils::Encode, ClientHello};
 
 pub enum ProtocolVersion {
     TLSv1_0,
@@ -15,9 +15,9 @@ pub enum ProtocolVersion {
 }
 
 impl AssignedValue for ProtocolVersion {
-    type Integer = u16;
+    type UInt = u16;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::TLSv1_0 => 0x0301,
             Self::TLSv1_1 => 0x0302,
@@ -41,9 +41,9 @@ pub enum CipherSuite {
 }
 
 impl AssignedValue for CipherSuite {
-    type Integer = u16;
+    type UInt = u16;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::TLS13_AES_128_GCM_SHA256 => 0x1301,
             Self::TLS13_AES_256_GCM_SHA384 => 0x1302,
@@ -66,9 +66,9 @@ pub enum CompressionMethod {
 }
 
 impl AssignedValue for CompressionMethod {
-    type Integer = u8;
+    type UInt = u8;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::Null => 0x00,
             Self::Deflate => 0x01,
@@ -85,9 +85,9 @@ pub enum ExtensionType {
 }
 
 impl AssignedValue for ExtensionType {
-    type Integer = u16;
+    type UInt = u16;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::SupportedGroups(_) => 0x000a,
             Self::SignatureAlgorithms(_) => 0x000d,
@@ -112,9 +112,9 @@ pub enum NamedGroup {
 }
 
 impl AssignedValue for NamedGroup {
-    type Integer = u16;
+    type UInt = u16;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::secp256r1 => 0x0017,
             Self::secp384r1 => 0x0018,
@@ -149,9 +149,9 @@ pub enum SignatureScheme {
 }
 
 impl AssignedValue for SignatureScheme {
-    type Integer = u16;
+    type UInt = u16;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::ECDSA_SECP256r1_SHA256 => 0x0403,
             Self::ECDSA_SECP384r1_SHA384 => 0x0503,
@@ -174,13 +174,13 @@ impl AssignedValue for SignatureScheme {
 // とりあえず ClientHello だけ
 // TODO: 気が向いたら拡張していきたいなぁ
 pub enum HandshakeType {
-    ClientHello
+    ClientHello,
 }
 
 impl AssignedValue for HandshakeType {
-    type Integer = u8;
+    type UInt = u8;
 
-    fn assigned_value(&self) -> Self::Integer {
+    fn assigned_value(&self) -> Self::UInt {
         match *self {
             Self::ClientHello => 0x01,
         }
@@ -188,13 +188,27 @@ impl AssignedValue for HandshakeType {
 }
 
 pub enum HandshakeData {
-    ClientHello(ClientHello)
+    ClientHello(ClientHello),
 }
 
 impl HandshakeData {
     pub fn encode(&self, bytes: &mut Vec<u8>) {
         match *self {
             Self::ClientHello(ref data) => data.encode(bytes),
+        }
+    }
+}
+
+pub enum ContentType {
+    Handshake,
+}
+
+impl AssignedValue for ContentType {
+    type UInt = u8;
+
+    fn assigned_value(&self) -> Self::UInt {
+        match *self {
+            Self::Handshake => 0x16,
         }
     }
 }

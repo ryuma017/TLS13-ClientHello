@@ -4,9 +4,10 @@ mod client_version;
 mod compression_methods;
 mod enums;
 mod extensions;
-mod session_id;
-mod utils;
 mod handshake;
+mod session_id;
+mod tls_plaintext;
+mod utils;
 
 use cipher_suites::CipherSuites;
 use client_random::ClientRandom;
@@ -68,16 +69,15 @@ mod tests {
                 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b,
                 0x1c, 0x1d, 0x1e, 0x1f,
                 // --- Session ID ---
-                0x20,       // 0x20 (32) bytes of session ID follow
+                0x20, // 0x20 (32) bytes of session ID follow
                 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed,
                 0xee, 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb,
-                0xfc, 0xfd, 0xfe, 0xff,
-                // --- Cipher Suites ---
+                0xfc, 0xfd, 0xfe, 0xff, // --- Cipher Suites ---
                 0x00, 0x02, // 2 bytes of cipher suite data
                 0x13, 0x01, // "TLS_AES_128_GCM_SHA256"
                 // --- Compression Methods ---
-                0x01,       // 1 bytes of compression methods
-                0x00,       // "null" compression
+                0x01, // 1 bytes of compression methods
+                0x00, // "null" compression
                 // --- Extensions length ---
                 0x00, 0x57, // Extension - Supported Groups
                 0x00, 0x0a, // assigned value for extension "supported groups"
@@ -103,7 +103,7 @@ mod tests {
                 // Extension - Supported Versions
                 0x00, 0x2d, // assigned value for extension "Supported Versions"
                 0x00, 0x03, // 3 bytes of "Supported Versions" extension data follows
-                0x02,       // 2 bytes of TLS versions follow
+                0x02, // 2 bytes of TLS versions follow
                 0x03, 0x04, // "TLS 1.3"
                 // Extension - Key Share
                 0x00, 0x33, // assigned value for extension "Key Share"
